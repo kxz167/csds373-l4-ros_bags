@@ -1,0 +1,37 @@
+<launch>
+<!-- Determine using xacro or urdf files -->
+<arg name="use_xacro" default="false" />
+<arg if="$(arg use_xacro)" name="filename" default="navvis.xacro" />
+<arg unless="$(arg use_xacro)" name="filename" default="navvis.urdf" />
+
+<!-- Determine using gui or not -->
+<arg name="jsp_gui" default="true" />
+
+<!-- Determine whether or not to run the robot_state_publisher -->
+<arg name="use_robot_state_publisher" default="true" />
+
+<!-- Determine the file -->
+<arg name="file" default = "$(find navvis_descriptions)/urdf/$(arg filename)" />
+
+<!-- Set robot description based on urdf or xacro -->
+<param if="$(arg use_xacro)" name="robot_description" command="$(find xacro)/xacro $(arg file)" />
+<param unless="$(arg use_xacro)" name="robot_description" textfile="$(arg file)" />
+
+<!-- Create the JSP gui if desired to contorl non-static -->
+<node if="$(arg jsp_gui)" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" name="joint_state_publisher_gui" />
+
+<!-- Run static publisher for initializing fixed joints -->
+<node if="$(arg use_robot_state_publisher)" pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" />    
+
+<!-- Only set the static robot parts if there is NO JSP gui AND there is NO use_robot_state_publisher -->
+<node unless="$(eval arg(jsp_gui) or arg(use_robot_state_publisher))" pkg="rostopic" type="rostopic" name="init_wheels" args="pub -l /joint_states sensor_msgs/JointState 
+&quot;{
+    header: auto, 
+    name: ['base_wheel_left_joint', 'base_wheel_right_joint', 'base_wheel_center_joint'], 
+    position: [0,0,0]
+}&quot;"/>
+
+<!-- RVIZ -->
+<node pkg="rviz" type="rviz" name="rviz" args="-d $(find navvis_descriptions)/config/config.rviz" required="true" />
+</launch>
+
