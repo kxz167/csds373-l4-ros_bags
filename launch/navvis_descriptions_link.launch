@@ -11,7 +11,7 @@
 <arg name="use_robot_state_publisher" default="true" />
 
 <!-- Determine the file -->
-<arg name="file" default = "$(find navvis_descriptions)/urdf/$(arg filename)" />
+<arg name="file" default="$(find navvis_descriptions)/urdf/$(arg filename)" />
 
 <!-- Set robot description based on urdf or xacro -->
 <param if="$(arg use_xacro)" name="robot_description" command="$(find xacro)/xacro $(arg file)" />
@@ -24,7 +24,7 @@
 <node if="$(arg use_robot_state_publisher)" pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" />    
 
 <!-- Only set the static robot parts if there is NO JSP gui AND there is NO use_robot_state_publisher -->
-<node unless="$(eval arg(jsp_gui) or arg(use_robot_state_publisher))" pkg="rostopic" type="rostopic" name="init_wheels" args="pub -l /joint_states sensor_msgs/JointState 
+<node unless="$(eval arg('jsp_gui') or arg('use_robot_state_publisher'))" pkg="rostopic" type="rostopic" name="init_wheels" args="pub -l /joint_states sensor_msgs/JointState 
 &quot;{
     header: auto, 
     name: ['base_wheel_left_joint', 'base_wheel_right_joint', 'base_wheel_center_joint'], 
