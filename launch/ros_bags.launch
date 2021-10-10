@@ -2,7 +2,13 @@
     <arg name="filename" default="navvis_imu.xacro" />
     <arg name="file" default="$(find team2_ros_bags)/urdf/$(arg filename)" />
 
+    <!-- Utilize simulated clock time -->
+    <arg name="use_sim_time" default="true"/>
+    <param name="/use_sim_time" value="$(arg use_sim_time)"/>
+
     <include file="$(find team2_ros_bags)/launch/navvis_descriptions_link.launch">
         <arg name="file" value="$(arg file)"/>
+        <arg name="use_xacro" value="true"/>
+        <!-- <arg name="use_robot_state_publisher" value="false"/> -->
     </include>
 </launch>

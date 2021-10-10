@@ -32,6 +32,6 @@
 }&quot;"/>
 
 <!-- RVIZ -->
-<node pkg="rviz" type="rviz" name="rviz" args="-d $(find navvis_descriptions)/config/config.rviz" required="true" />
+<node pkg="rviz" type="rviz" name="rviz" args="-d $(find team2_ros_bags)/config/laser_topic_config.rviz" required="true" />
 </launch>
 
