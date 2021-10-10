@@ -10,6 +10,7 @@ project(team2_ros_bags)
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   navvis_descriptions
+  maps_glennan
   roscpp
   sensor_msgs
   std_msgs
