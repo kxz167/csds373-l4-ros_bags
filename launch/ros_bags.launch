@@ -1,14 +1,31 @@
 <launch>
-    <arg name="filename" default="navvis_imu.xacro" />
-    <arg name="file" default="$(find team2_ros_bags)/urdf/$(arg filename)" />
-
     <!-- Utilize simulated clock time -->
     <arg name="use_sim_time" default="true"/>
     <param name="/use_sim_time" value="$(arg use_sim_time)"/>
 
+    <!-- Start the robot visualization -->
     <include file="$(find team2_ros_bags)/launch/navvis_descriptions_link.launch">
-        <arg name="file" value="$(arg file)"/>
+        <!-- Force xacro with file from this package -->
+        <arg name="file" value="$(find team2_ros_bags)/urdf/navvis_imu.xacro"/>
         <arg name="use_xacro" value="true"/>
-        <!-- <arg name="use_robot_state_publisher" value="false"/> -->
+        
+        <!-- Forwarding options -->
+        <arg name="jsp_gui" value="false"/> <!-- potentially allow the user to rotate wheels... -->
+        <arg name="use_robot_state_publisher" value="false"/>
     </include>
+
+    <!-- Load the map server -->
+    <arg name="launch_map" default="true"/>
+    <node if="$(arg launch_map)" name="map_server" pkg="map_server" type="map_server" output="screen" args="$(find maps_glennan)/maps/glennan5_map.yaml" />
+
+    <!-- Begin playing through the bags -->
+    <arg name="launch_bag" default="true"/>
+    <arg name="bag_gui" default="false"/>
+    <arg name="bag_file" default="glennan_5_basic.bag"/>
+
+    <!-- Load the command line tools for playing ros bags -->
+    <node if="$(eval arg('launch_bag') and not arg('bag_gui'))" pkg="rosbag" name="rosbag" type="play" output="screen" args="--clock $(find team2_ros_bags)/bags/$(arg bag_file) /tf_trajectory:=/tf" />
+    <!-- Load the GUI for playing ros bags -->
+    <node if="$(eval arg('launch_bag') and arg('bag_gui'))" pkg="rqt_bag" name="rqt_bag" type="rqt_bag" args="--clock $(find team2_ros_bags)/bags/$(arg bag_file) /tf_trajectory:=/tf"/>
+
 </launch>

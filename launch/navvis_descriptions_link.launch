@@ -19,17 +19,28 @@
 
 <!-- Create the JSP gui if desired to contorl non-static -->
 <node if="$(arg jsp_gui)" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" name="joint_state_publisher_gui" />
-
-<!-- Run static publisher for initializing fixed joints -->
-<node if="$(arg use_robot_state_publisher)" pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" />    
-
-<!-- Only set the static robot parts if there is NO JSP gui AND there is NO use_robot_state_publisher -->
-<node unless="$(eval arg('jsp_gui') or arg('use_robot_state_publisher'))" pkg="rostopic" type="rostopic" name="init_wheels" args="pub -l /joint_states sensor_msgs/JointState 
+<!-- Only set the static robot parts if there is no JSP gui setting rotation -->
+<node unless="$(arg jsp_gui)" pkg="rostopic" type="rostopic" name="init_wheels" args="pub -l /joint_states sensor_msgs/JointState 
 &quot;{
     header: auto, 
     name: ['base_wheel_left_joint', 'base_wheel_right_joint', 'base_wheel_center_joint'], 
     position: [0,0,0]
 }&quot;"/>
+
+<!-- Run static publisher for initializing fixed joints -->
+<node if="$(arg use_robot_state_publisher)" pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" />    
+<group unless="$(arg use_robot_state_publisher)">
+    <node pkg="tf2_ros" type="static_transform_publisher" name="lvb_link_broadcaster" args="0.3158 -0.0021 0.5100 3.1355 -1.3045 0.0025 base laser_vert_bottom"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="lvh_link_broadcaster" args="0.236811 0.000138773 1.95755 -0.000556064 0.0572691 -0.000714408 0.998358 base laser_horiz"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="lvhb_link_broadcaster" args="0.2325 0.0001 1.9201 -0.000556064 0.0572691 -0.000714408 0.998358 base laser_horiz_base_link"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="lvl_link_broadcaster" args="0.2997 0.1531 1.8443 1.1780 0.6198 1.9560 base laser_vert_top_left"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="lvr_link_broadcaster" args="0.2978 -0.1450 1.8451 -1.760 0.6313 -1.9377 base laser_vert_top_right"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="base_link_broadcaster" args="0.07 0 1.792 0.0 3.1415 0.0 base_link base"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="imu_link_broadcaster" args="0.0 0.0 0.0 3.1405788 0.0034281 3.1382064 base_link imu"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="wr_link_broadcaster" args="-0.1 0.4 0.0 -0.707107 0 0 0.707107 base wheel_right"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="wl_link_broadcaster" args="-0.1 -0.4 0.0 -0.707107 0 0 0.707107 base wheel_left"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="wc_link_broadcaster" args="0.1 0 -0.05 -0.707107 0 0 0.707107 base wheel_center"/>
+</group>
 
 <!-- RVIZ -->
 <node pkg="rviz" type="rviz" name="rviz" args="-d $(find team2_ros_bags)/config/laser_topic_config.rviz" required="true" />

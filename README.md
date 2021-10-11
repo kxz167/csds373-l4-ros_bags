@@ -51,6 +51,8 @@ This package depends on two other packages that should be installed into the sam
 - RVIZ Visualization:
     - The robot LaserScan displays have been modified to have a `decay time` of 1 second. I found this provides the best representation of the environment around the robot.
     - There are a couple pre-specified views that aid in visualizing the 3D enviroment around the robot.
+- Static Transform Publisher:
+    - No static transforms were given in the lab. As a result, all static transforms used to circumvent the Robot State Publisher in the launch file were taken from RVIZ link viewer running the command `roslaunch navvis_descriptions navvis_Descriptions.launch use_xacro:=true`. A note about links is that importing the XACRO file for the horizontal laser scanner creates geometry transformed with respect to another object (which is why the final location in RVIZ was necessary to use).
 
 ## Installation:
 

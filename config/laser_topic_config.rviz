@@ -4,8 +4,6 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /LaserScan_bottom1
-        - /Map1
         - /Map1/Position1
       Splitter Ratio: 0.5
     Tree Height: 698
