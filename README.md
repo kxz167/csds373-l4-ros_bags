@@ -46,13 +46,15 @@ This package depends on two other packages that should be installed into the sam
     - README.md
 
 ### Important Notes:
+- Bag Files:
+    - In order to prevent tracking GB+ size files, all bags have been ignored. This lab worked with the short and basic bags, but any bag from the provided Google Drive can be used if placed in the bags directory.
 - Launch files:
     - While the assignment called for modifications to the previous lab package, Dr Lee has mentioned that making a copy of the primary launch file and making the edits within this package was satisfactory. `navvis_descriptions_link.launch` represents the modified launch file from previous laboratories and provides a modular link into past packages without modifying them.
 - RVIZ Visualization:
     - The robot LaserScan displays have been modified to have a `decay time` of 1 second. I found this provides the best representation of the environment around the robot.
-    - There are a couple pre-specified views that aid in visualizing the 3D enviroment around the robot.
+    - There are a couple pre-specified views that have been provided to aid in visualizing the 3D enviroment around the robot.
 - Static Transform Publisher:
-    - No static transforms were given in the lab. As a result, all static transforms used to circumvent the Robot State Publisher in the launch file were taken from RVIZ link viewer running the command `roslaunch navvis_descriptions navvis_Descriptions.launch use_xacro:=true`. A note about links is that importing the XACRO file for the horizontal laser scanner creates geometry transformed with respect to another object (which is why the final location in RVIZ was necessary to use).
+    - No static transforms were given in the lab. As a result, all static transforms used to circumvent the Robot State Publisher in the launch file were taken first from the URDF / XACRO files, then the RVIZ link viewer running the command `roslaunch navvis_descriptions navvis_Descriptions.launch use_xacro:=true`. A note about links is that importing the XACRO file for the horizontal laser scanner creates geometry transformed with respect to another object (which is why the final location in RVIZ was necessary to use).
 
 ## Installation:
 
@@ -114,11 +116,26 @@ https://drive.google.com/drive/u/1/folders/1ptmPrQc8g12GmbfNCklQ2fOF5rFum46-
 ```
 
 ## Running:
-Once all of the packages and files have been installed as specified above, the visualizations can be launched. The following possibilities have been provided:
+Once all of the packages and files have been installed as specified above and set up, the visualizations can be launched. The following will run the package with alternative possibilities provided through `options`:
 
-1. Broadcasting Bags (GUI or not)
-    - Options: use --clock by default, re-broadcast, no gui default.
-2. Broadcasting the map.
-3. Launching the visualization
-    - Options: use external clock by default
-    - Launch map
+``` 
+roslaunch team2_ros_bags ros_bags.launch [options]
+```
+Where options are of the following form:
+- launch_bags:=[true/false(default)]
+    - Launch the bag playback with the following options:
+    - use_gui:=[true/false(default)]
+        - Utilize `rqt_bag` to replay bags or the command line tool.
+    - bag_file:=<filename> (default = glennan_5_basic.bag)
+        - Name of the alternative bag file.
+- launch_map:=[true/false(default)]
+    - Launches the provided Glennan map to attach into RVIZ
+- use_sim time:=[true(default)/false]
+    - Whether or not to depend on a simulated clock output by bag playback.
+
+So in order to run the program launching both bag playback, and the map server, would require:
+```
+roslaunch team2_ros_bags ros_bags.launch launch_bags:=true launch_map:=true
+```
+
+*NOTE:* The included bags playback will launch dependent on a simulated clock (`--clock` parameter set) and is meant to be a QoL option providing one launchpoint for full functionality.
