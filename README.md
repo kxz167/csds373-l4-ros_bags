@@ -126,7 +126,7 @@ Where options are of the following form:
     - Launch the bag playback with the following options:
     - use_gui:=[true/false(default)]
         - Utilize `rqt_bag` to replay bags or the command line tool.
-    - bag_file:=<filename> (default = glennan_5_basic.bag)
+    - bag_file_path:=<file_path> (No default provied)
         - Name of the alternative bag file.
 - launch_map:=[true/false(default)]
     - Launches the provided Glennan map to attach into RVIZ
@@ -138,4 +138,6 @@ So in order to run the program launching both bag playback, and the map server, 
 roslaunch team2_ros_bags ros_bags.launch launch_bags:=true launch_map:=true
 ```
 
-*NOTE:* The included bags playback will launch dependent on a simulated clock (`--clock` parameter set) and is meant to be a QoL option providing one launchpoint for full functionality.
+*NOTES:* 
+- The included bags playback will launch dependent on a simulated clock (`--clock` parameter set) and is meant to be a QoL option providing one launchpoint for full functionality.
+- The only interface to the package should be through `ros_bags.launch`. Users are not intended to use the `navvis_descriptions_link.launch`. All configurations can be speicifed thorugh the ros_bags launch file (such as only showing RVIZ, and running (or not) the map and bag servers).
