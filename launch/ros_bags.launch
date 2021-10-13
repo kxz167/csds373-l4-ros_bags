@@ -1,5 +1,5 @@
 <launch>
-    <arg name="rviz_config" default="full.rviz">
+    <arg name="rviz_config" default="full.rviz"/>
 
     <!-- Utilize simulated clock time -->
     <arg name="use_sim_time" default="true"/>

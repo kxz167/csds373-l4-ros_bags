@@ -31,9 +31,6 @@ This package depends on two other packages that should be installed into the sam
 
 ### Package directory structure:
 - team2_ros_bags (from github)
-    - bags (downloaded pre-recorded bags)
-        - glennan_5_basic_short.bag (ignored)
-        - glennan_5_basic.bag (ignored)
     - config (rviz configuration)
         - laser_topic_config.rviz
     - launch (new launch files)
@@ -46,8 +43,6 @@ This package depends on two other packages that should be installed into the sam
     - README.md
 
 ### Important Notes:
-- Bag Files:
-    - In order to prevent tracking GB+ size files, all bags have been ignored. This lab worked with the short and basic bags, but any bag from the provided Google Drive can be used if placed in the bags directory.
 - Launch files:
     - While the assignment called for modifications to the previous lab package, Dr Lee has mentioned that making a copy of the primary launch file and making the edits within this package was satisfactory. `navvis_descriptions_link.launch` represents the modified launch file from previous laboratories and provides a modular link into past packages without modifying them.
 - RVIZ Visualization:
@@ -109,7 +104,7 @@ source devel/setup.bash
 
 ### Loading the bags:
 
-As all bag files have been ommitted from the github repository, they need to be downloaded and placed into the `bags` directory following the package structure and naming listed above. They can be found at:
+As all bag files have been ommitted from the github repository and package, they need to be downloaded and located on the client machines:
 
 ```
 https://drive.google.com/drive/u/1/folders/1ptmPrQc8g12GmbfNCklQ2fOF5rFum46-
@@ -127,15 +122,21 @@ Where options are of the following form:
     - use_gui:=[true/false(default)]
         - Utilize `rqt_bag` to replay bags or the command line tool.
     - bag_file_path:=<file_path> (No default provied)
-        - Name of the alternative bag file.
+        - Full qualified path to the bag files. REQUIRED if launching ros_bag functionality.
+        - No default is provided because there is no information on where the bag files will be located.
 - launch_map:=[true/false(default)]
     - Launches the provided Glennan map to attach into RVIZ
 - use_sim time:=[true(default)/false]
     - Whether or not to depend on a simulated clock output by bag playback.
+- rviz_config:=<config_type> (default = full.rviz)
+    - Three options have been provided to view the status as defined in the deliverables but we recommend always using full and toggling various options:
+    1. full.rviz - The final view in RVIZ with the views, map, and laserscans.
+    2. laser_only.rviz - The view with laserscans added on top of the modified robot.
+    3. original.rviz - The rviz configuration that was pulled from the previous lab showing only the updated robot.
 
 So in order to run the program launching both bag playback, and the map server, would require:
 ```
-roslaunch team2_ros_bags ros_bags.launch launch_bags:=true launch_map:=true
+roslaunch team2_ros_bags ros_bags.launch launch_bags:=true launch_map:=true bag_file_path:=<path_to_bag_files>.bag
 ```
 
 *NOTES:* 
